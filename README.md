@@ -1,57 +1,56 @@
 # Project Name
 
-(short, 1-3 sentenced, description of the project)
+Unit and integration tests examples for Azure Functions
+
+This repo is a sample .NET 6 "Create Notes" API written using Azure Functions template and contains examples on how to properly write unit and integration tests for the Azure Functions classes.
 
 ## Features
 
 This project framework provides the following features:
 
-* Feature 1
-* Feature 2
-* ...
+* Unit tests for Azure Function classes
+* Integration tests for Azure Function classes
 
 ## Getting Started
 
 ### Prerequisites
 
-(ideally very short, if any)
+The code in this repo requires knowledge of the following concepts and frameworks:
 
-- OS
-- Library version
-- ...
+- Unit testing
+- Integration testing
+- [xUnit](https://github.com/xunit/xunit)
+  - Testing framework
+- [NSubstitute](https://nsubstitute.github.io/)
+  - Mocking framework
+- [FluentAssertions](https://fluentassertions.com/)
 
 ### Installation
 
-(ideally very short)
+The API uses Azure Cosmos DB to store the created Notes and to run it locally you must run your API against a local instance of Azure CosmosDB. 
 
-- npm install [package name]
-- mvn install
-- ...
+It’s availalble for download [here](https://aka.ms/cosmosdb-emulator)
 
 ### Quickstart
-(Add steps to get up and running quickly)
 
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+Also to be able to run this demo on your own in your local machine you need to create a local.settings.json file inside the Fta.DemoFunc.Api project.
 
+As it’s not advisable to store keys and secrets inside a git repository, for local development you can use a local.settings.json file to store configuration.
 
-## Demo
+Sample local.settings.json file:
 
-A demo app is included to show how to use the project.
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "NotificationApiUrl": "https://63cacb2d4f53a004202b1df7.mockapi.io/api/v1/",
+  "CosmosDb": {
+    "ConnectionString": "AccountEndpoint=https://localhost:8081/;AccountKey=..."
+  }
+}
 
-To run the demo, follow these steps:
+The "NotificationApiUrl" setting is a mock 3rd party API (created with [mockapi.io](https://mockapi.io/)) which we call to send notification events that a new note has been created into our system.
 
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+You can use the "NotificationApiUrl" setting as is to run the demo API locally. It is here to demonstrate how to handle integration tests against 3rd party APIs that you do not control.
