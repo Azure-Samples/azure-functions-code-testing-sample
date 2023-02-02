@@ -1,4 +1,4 @@
-# Project Name
+# Azure Functions Code Testing Sample
 
 Unit and integration tests examples for Azure Functions
 
