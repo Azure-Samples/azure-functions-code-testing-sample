@@ -1,6 +1,5 @@
 ﻿using Fta.DemoFunc.Api.Entities;
 using Fta.DemoFunc.Api.Interfaces;
-using Fta.DemoFunc.Api.Settings;
 using Microsoft.Azure.Cosmos;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,16 +9,21 @@ namespace Fta.DemoFunc.Api.Repositories
     public class NoteRepository : INoteRepository
     {
         private readonly CosmosClient _cosmosClient;
-        private readonly Container _container;
-
-        public NoteRepository(CosmosDbSettings cosmosDbSettings)
+        
+        public NoteRepository(CosmosClient cosmosClient)
         {
-            _cosmosClient = new CosmosClient(cosmosDbSettings.ConnectionString);
-            _container = _cosmosClient.GetContainer("NoteDatabase", "Notes");
+            _cosmosClient = cosmosClient;
         }
+
         public async Task<Note> CreateAsync(Note note, CancellationToken ct)
         {
-            var itemResponse = await _container.CreateItemAsync(note, new PartitionKey(note.Id), cancellationToken: ct);
+            var databaseResponse = await _cosmosClient.CreateDatabaseIfNotExistsAsync("NoteDatabase", cancellationToken: ct);
+            var database = databaseResponse.Database;
+
+            var containerResponse = await database.CreateContainerIfNotExistsAsync("Notes", "/id", cancellationToken: ct);
+            var container = containerResponse.Container;
+
+            var itemResponse = await container.CreateItemAsync(note, new PartitionKey(note.Id), cancellationToken: ct);
 
             return itemResponse.Resource;
         }

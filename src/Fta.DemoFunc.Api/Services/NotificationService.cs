@@ -1,6 +1,7 @@
 ﻿using Fta.DemoFunc.Api.Interfaces;
 using Fta.DemoFunc.Api.Models;
 using Fta.DemoFunc.Api.Options;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -13,9 +14,9 @@ namespace Fta.DemoFunc.Api.Services
     public class NotificationService : INotificationService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILoggerAdapter<NotificationService> _logger;
+        private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService(HttpClient httpClient, ILoggerAdapter<NotificationService> logger)
+        public NotificationService(HttpClient httpClient, ILogger<NotificationService> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
@@ -33,17 +34,17 @@ namespace Fta.DemoFunc.Api.Services
                 var json = JsonSerializer.Serialize(noteCreatedRequest);
                 var data = new StringContent(json, Encoding.UTF8, "application/json");
                 var httpResponseMessage = await _httpClient.PostAsync("notes", data, ct);
-                
+
                 if (!httpResponseMessage.IsSuccessStatusCode)
                 {
                     var responseContentStr = await httpResponseMessage.Content.ReadAsStringAsync(ct);
 
-                    _logger.LogError(responseContentStr);
+                    _logger.LogError("The HTTP request failed with the following error: {responseContent}", responseContentStr);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Exception in {nameof(NotificationService)} -> {nameof(SendNoteCreatedEventAsync)} method.");
+                _logger.LogError(ex, "Exception in {ClassName} -> {MethodName} method.", nameof(NotificationService), nameof(SendNoteCreatedEventAsync));
             }
         }
     }

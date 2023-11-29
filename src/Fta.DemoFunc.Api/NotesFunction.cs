@@ -9,15 +9,16 @@ using Fta.DemoFunc.Api.Contracts.Requests;
 using System.Threading;
 using Fta.DemoFunc.Api.Options;
 using Fta.DemoFunc.Api.Contracts.Responses;
+using Microsoft.Extensions.Logging;
 
 namespace Fta.DemoFunc.Api
 {
     public class NotesFunction
     {
         private readonly INoteService _noteService;
-        private readonly ILoggerAdapter<NotesFunction> _logger;
+        private readonly ILogger<NotesFunction> _logger;
 
-        public NotesFunction(INoteService noteService, ILoggerAdapter<NotesFunction> logger)
+        public NotesFunction(INoteService noteService, ILogger<NotesFunction> logger)
         {
             _noteService = noteService;
             _logger = logger;
@@ -53,7 +54,7 @@ namespace Fta.DemoFunc.Api
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Exception in {nameof(NotesFunction)} -> {nameof(Post)} method.");
+                _logger.LogError(ex, "Exception in {ClassName} -> {MethodName} method.", nameof(NotesFunction), nameof(Post));
 
                 return new InternalServerErrorResult();
             }
