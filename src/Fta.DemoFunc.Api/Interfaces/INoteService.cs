@@ -7,6 +7,6 @@ namespace Fta.DemoFunc.Api.Interfaces
 {
     public interface INoteService
     {
-        Task<NoteDto> CreateNoteAsync(CreateNoteOptions createNoteOptions, CancellationToken ct);
+        Task<NoteDto> CreateNoteAsync(CreateNoteOptions createNoteOptions, CancellationToken ct = default);
     }
 }

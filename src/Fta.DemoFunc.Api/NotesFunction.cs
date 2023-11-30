@@ -26,8 +26,7 @@ namespace Fta.DemoFunc.Api
 
         [FunctionName("NotesFunction")]
         public async Task<ActionResult<CreateNoteResponse>> Post(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "notes")] CreateNoteRequest createNoteRequest, CancellationToken ct = default
-        )
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "notes")] CreateNoteRequest createNoteRequest, CancellationToken ct = default)
         {
             _logger.LogInformation("C# HTTP trigger NotesFunction processed a request.");
 

@@ -15,7 +15,8 @@ namespace Fta.DemoFunc.Api
                  .AddEnvironmentVariables()
                  .Build();
 
-            builder.Services.AddApiServices(configuration);
+            builder.Services.AddApplication(configuration);
+            builder.Services.AddInfrastructure(configuration);
         }
     }
 }

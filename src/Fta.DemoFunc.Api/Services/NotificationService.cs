@@ -22,7 +22,7 @@ namespace Fta.DemoFunc.Api.Services
             _logger = logger;
         }
 
-        public async Task SendNoteCreatedEventAsync(CreateNoteOptions createNoteOptions, CancellationToken ct)
+        public async Task SendNoteCreatedEventAsync(CreateNoteOptions createNoteOptions, CancellationToken ct = default)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace Fta.DemoFunc.Api.Services
                 {
                     var responseContentStr = await httpResponseMessage.Content.ReadAsStringAsync(ct);
 
-                    _logger.LogError("The HTTP request failed with the following error: {responseContent}", responseContentStr);
+                    _logger.LogError("The HTTP request failed with the following error: {ResponseContent}", responseContentStr);
                 }
             }
             catch (Exception ex)

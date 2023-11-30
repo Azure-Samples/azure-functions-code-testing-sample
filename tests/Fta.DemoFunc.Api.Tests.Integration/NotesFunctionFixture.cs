@@ -1,40 +1,29 @@
 ﻿using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Configurations;
-using System.IO;
-using System;
 using System.Threading.Tasks;
-using Testcontainers.CosmosDb;
 using Xunit;
+using Testcontainers.PostgreSql;
 
 namespace Fta.DemoFunc.Api.Tests.Integration
 {
-    public class NotesFunctionFixture : IAsyncLifetime, IDisposable
+    public class NotesFunctionFixture : IAsyncLifetime
     {
-        private readonly IOutputConsumer _outputConsumer = Consume.RedirectStdoutAndStderrToStream(new MemoryStream(), new MemoryStream());
-        private readonly CosmosDbContainer _cosmosDbContainer;
+        private readonly PostgreSqlContainer _postgreSqlContainer =
+            new PostgreSqlBuilder()
+                .WithImage("postgres:latest")
+                .WithEnvironment("POSTGRES_USER", "postgres")
+                .WithEnvironment("POSTGRES_PASSWORD", "postgres")
+                .WithEnvironment("POSTGRES_DB", "notesdb")
+                .WithPortBinding(5432, 5432)
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
+                .Build();
         private readonly NotificationApiServer _notificationApiServer = new();
 
-        public NotesFunctionFixture()
-        {
-            _cosmosDbContainer = new CosmosDbBuilder()
-                .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
-                .WithName("Cosmos_DB")
-                .WithExposedPort(8081)
-                .WithPortBinding(8081, 8081)
-                .WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "1")
-                .WithEnvironment("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE", "127.0.0.1")
-                .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "false")
-                .WithOutputConsumer(_outputConsumer)
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged("Started"))
-                .Build();
-        }
-
-        public string GetCosmosDbConnectionString() => _cosmosDbContainer.GetConnectionString();
+        public string GetPostgresDbConnectionString() => _postgreSqlContainer.GetConnectionString();
         public string GetNotificationApiServerUrl() => _notificationApiServer.Url;
 
         public async Task DisposeAsync()
         {
-            await _cosmosDbContainer.DisposeAsync();
+            await _postgreSqlContainer.DisposeAsync();
             _notificationApiServer.Dispose();
         }
 
@@ -42,12 +31,7 @@ namespace Fta.DemoFunc.Api.Tests.Integration
         {
             _notificationApiServer.Start();
             _notificationApiServer.SetupRequestDetails();
-            await _cosmosDbContainer.StartAsync();
-        }
-
-        public void Dispose()
-        {
-            _outputConsumer.Dispose();
+            await _postgreSqlContainer.StartAsync();
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Fta.DemoFunc.Api.Interfaces;
+using Fta.DemoFunc.Api.Persistence;
 using Fta.DemoFunc.Api.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Net.Http;
 
 namespace Fta.DemoFunc.Api.Tests.Integration
 {
@@ -32,34 +30,14 @@ namespace Fta.DemoFunc.Api.Tests.Integration
                             .AddEnvironmentVariables()
                             .Build();
 
-                        services.AddApiServices(configuration);
+                        services.AddApplication(configuration);
+                        services.AddInfrastructure(configuration);
 
                         services.RemoveAll(typeof(IHostedService));
 
-                        var cosmosClientDescriptor = services.SingleOrDefault(
-                        d => d.ServiceType ==
-                            typeof(CosmosClient));
-
-                        services.Remove(cosmosClientDescriptor!);
-
-                        services.AddSingleton(sp =>
-                        {
-                            var cosmosClientBuilder = new CosmosClientBuilder(notesFunctionFixture.GetCosmosDbConnectionString());
-
-                            cosmosClientBuilder.WithHttpClientFactory(() =>
-                            {
-                                var httpMessageHandler = new HttpClientHandler
-                                {
-                                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                                };
-
-                                return new HttpClient(httpMessageHandler);
-                            });
-
-                            cosmosClientBuilder.WithConnectionModeGateway();
-
-                            return cosmosClientBuilder.Build();
-                        });
+                        services.RemoveAll(typeof(IDbConnectionFactory));
+                        services.AddSingleton<IDbConnectionFactory>(_ =>
+                            new NpgsqlConnectionFactory(notesFunctionFixture.GetPostgresDbConnectionString()));
 
                         var notificationServiceDescriptor = services.SingleOrDefault(
                                 d => d.ServiceType ==

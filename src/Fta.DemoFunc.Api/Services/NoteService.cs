@@ -28,7 +28,7 @@ namespace Fta.DemoFunc.Api.Services
             _logger = logger;
         }
 
-        public async Task<NoteDto> CreateNoteAsync(CreateNoteOptions createNoteOptions, CancellationToken ct)
+        public async Task<NoteDto> CreateNoteAsync(CreateNoteOptions createNoteOptions, CancellationToken ct = default)
         {
             if (string.IsNullOrEmpty(createNoteOptions.Title) || string.IsNullOrEmpty(createNoteOptions.Body))
             {
@@ -39,7 +39,7 @@ namespace Fta.DemoFunc.Api.Services
 
             var newNote = await _noteRepository.CreateAsync(new Note
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 Title = createNoteOptions.Title,
                 Body = createNoteOptions.Body,
                 CreatedAt = _dateTimeProvider.UtcNow,
@@ -50,7 +50,7 @@ namespace Fta.DemoFunc.Api.Services
 
             return new NoteDto
             {
-                Id = newNote.Id,
+                Id = newNote.Id.ToString(),
                 Title = newNote.Title,
                 LastUpdatedOn = newNote.LastUpdatedOn,
                 Body = newNote.Body
