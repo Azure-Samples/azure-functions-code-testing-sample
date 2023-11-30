@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Fta.DemoFunc.Api.Entities;
 using Fta.DemoFunc.Api.Interfaces;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +32,12 @@ namespace Fta.DemoFunc.Api.Persistence.Repositories
                 note
             );
 
-            return note;
+            if (result == 1)
+            {
+                return note;
+            }
+
+            throw new ApplicationException("Could not save entity in db.");
         }
     }
 }

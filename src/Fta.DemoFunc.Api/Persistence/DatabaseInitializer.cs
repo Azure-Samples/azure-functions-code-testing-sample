@@ -20,7 +20,7 @@ namespace Fta.DemoFunc.Api.Persistence
             await connection.ExecuteAsync(@"
                 CREATE TABLE IF NOT EXISTS Notes (
                     Id UUID PRIMARY KEY, 
-                    Title VARCHAR(100) NOT NULL,
+                    Title VARCHAR(200) NOT NULL,
                     Body VARCHAR(1000) NOT NULL,
                     CreatedAt DATE NOT NULL,
                     LastUpdatedOn DATE NOT NULL

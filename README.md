@@ -49,8 +49,6 @@ docker run --name my-pgadmin -p 82:80 -e 'PGADMIN_DEFAULT_EMAIL=<your-email-plac
 
 And then access it via http://localhost:82 from a browser in your local machine.
 
-You must also create a DB inside Postgresql called **notesdb**.
-
 ### Quickstart
 
 To be able to run this demo on your own in your local machine you need to create a **local.settings.json** file inside the **Fta.DemoFunc.Api** project.
