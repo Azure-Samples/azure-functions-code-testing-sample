@@ -22,9 +22,10 @@ namespace Fta.DemoFunc.Api.Tests.Unit
 {
     public class NotesFunctionTests
     {
+        private readonly NotesFunction _sut;
+
         private readonly string _newNoteId = Guid.NewGuid().ToString();
         private readonly DateTime _newNoteLastUpdatedOn = DateTime.UtcNow;
-        private readonly NotesFunction _sut;
         private readonly INoteService _noteService = Substitute.For<INoteService>();
         private readonly ILogger<NotesFunction> _logger = NullLogger<NotesFunction>.Instance;
         private readonly Faker<CreateNoteRequest> _noteGenerator =
