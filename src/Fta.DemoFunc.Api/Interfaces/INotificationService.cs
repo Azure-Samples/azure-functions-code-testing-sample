@@ -6,6 +6,6 @@ namespace Fta.DemoFunc.Api.Interfaces
 {
     public interface INotificationService
     {
-        Task SendNoteCreatedEventAsync(CreateNoteOptions createNoteOptions, CancellationToken ct);
+        Task SendNoteCreatedEventAsync(CreateNoteOptions createNoteOptions, CancellationToken ct = default);
     }
 }

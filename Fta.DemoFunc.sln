@@ -9,9 +9,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6C01E311
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fta.DemoFunc.Api", "src\Fta.DemoFunc.Api\Fta.DemoFunc.Api.csproj", "{5126B44E-3E17-42D0-80CC-278DD8DB96A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fta.DemoFunc.Api.Tests.Unit", "tests\Fta.DemoFunc.Api.Tests.Unit\Fta.DemoFunc.Api.Tests.Unit.csproj", "{171D1C72-D240-402C-906B-3A9CA7A83B00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fta.DemoFunc.Api.Tests.Unit", "tests\Fta.DemoFunc.Api.Tests.Unit\Fta.DemoFunc.Api.Tests.Unit.csproj", "{171D1C72-D240-402C-906B-3A9CA7A83B00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fta.DemoFunc.Api.Tests.Integration", "tests\Fta.DemoFunc.Api.Tests.Integration\Fta.DemoFunc.Api.Tests.Integration.csproj", "{C1F0C7A1-4C73-4554-B2E2-40F19DB52328}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fta.DemoFunc.Api.Tests.Integration", "tests\Fta.DemoFunc.Api.Tests.Integration\Fta.DemoFunc.Api.Tests.Integration.csproj", "{C1F0C7A1-4C73-4554-B2E2-40F19DB52328}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EBE815AC-9D0A-4E79-9432-984560C5AF74}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

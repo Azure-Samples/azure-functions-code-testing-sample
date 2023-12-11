@@ -2,6 +2,7 @@
 using Fta.DemoFunc.Api.Entities;
 using Fta.DemoFunc.Api.Interfaces;
 using Fta.DemoFunc.Api.Options;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,13 +14,13 @@ namespace Fta.DemoFunc.Api.Services
         private readonly INoteRepository _noteRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly INotificationService _notificationService;
-        private readonly ILoggerAdapter<NoteService> _logger;
+        private readonly ILogger<NoteService> _logger;
 
         public NoteService(
             INoteRepository noteRepository, 
             IDateTimeProvider dateTimeProvider,
             INotificationService notificationService,
-            ILoggerAdapter<NoteService> logger)
+            ILogger<NoteService> logger)
         {
             _noteRepository = noteRepository;
             _dateTimeProvider = dateTimeProvider;
@@ -27,7 +28,7 @@ namespace Fta.DemoFunc.Api.Services
             _logger = logger;
         }
 
-        public async Task<NoteDto> CreateNoteAsync(CreateNoteOptions createNoteOptions, CancellationToken ct)
+        public async Task<NoteDto> CreateNoteAsync(CreateNoteOptions createNoteOptions, CancellationToken ct = default)
         {
             if (string.IsNullOrEmpty(createNoteOptions.Title) || string.IsNullOrEmpty(createNoteOptions.Body))
             {
@@ -38,7 +39,7 @@ namespace Fta.DemoFunc.Api.Services
 
             var newNote = await _noteRepository.CreateAsync(new Note
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
                 Title = createNoteOptions.Title,
                 Body = createNoteOptions.Body,
                 CreatedAt = _dateTimeProvider.UtcNow,
@@ -49,7 +50,7 @@ namespace Fta.DemoFunc.Api.Services
 
             return new NoteDto
             {
-                Id = newNote.Id,
+                Id = newNote.Id.ToString(),
                 Title = newNote.Title,
                 LastUpdatedOn = newNote.LastUpdatedOn,
                 Body = newNote.Body

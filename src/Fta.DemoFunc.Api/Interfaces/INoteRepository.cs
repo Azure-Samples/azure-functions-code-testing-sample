@@ -6,6 +6,6 @@ namespace Fta.DemoFunc.Api.Interfaces
 {
     public interface INoteRepository
     {
-        Task<Note> CreateAsync(Note note, CancellationToken ct);
+        Task<Note> CreateAsync(Note note, CancellationToken ct = default);
     }
 }
